@@ -10,6 +10,7 @@ class BlogController extends Controller
     // Tüm yazıları listele
     public function index()
     {
+     
         // En son eklenen en başta (Pagination ekledik ki sayfa şişmesin)
         $posts = Post::latest()->paginate(9); 
         
