@@ -4,24 +4,32 @@ namespace Omercanfs\BlogCore\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Omercanfs\BlogCore\Models\Post;
+use Omercanfs\BlogCore\Models\Category;
 
 class BlogController extends Controller
 {
-    // Tüm yazıları listele
     public function index()
     {
-     
-        // En son eklenen en başta (Pagination ekledik ki sayfa şişmesin)
-        $posts = Post::latest()->paginate(9); 
+        $posts = Post::with('category')->latest()->paginate(9);
+        $categories = Category::all(); // Sidebar için
         
-        return view('blog-core::front.index', compact('posts'));
+        return view('blog-core::front.index', compact('posts', 'categories'));
     }
 
-    // Tekil yazı detayı (Slug ile)
+    public function category($slug)
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+        
+        // Sadece bu kategoriye ait yazılar
+        $posts = $category->posts()->latest()->paginate(9);
+        $categories = Category::all();
+
+        return view('blog-core::front.index', compact('posts', 'categories', 'category'));
+    }
+
     public function show($slug)
     {
         $post = Post::where('slug', $slug)->firstOrFail();
-        
         return view('blog-core::front.show', compact('post'));
     }
 }

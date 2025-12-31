@@ -8,10 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // 1. Kategoriler Tablosu
+        Schema::create('blog_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->unique(); // SEO URL için
+            $table->timestamps();
+        });
+
+        // 2. Yazılar Tablosu (Güncel)
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->nullable()->constrained('blog_categories')->nullOnDelete();
             $table->string('title');
-            $table->string('slug')->unique(); // 👈 ÖNEMLİ
+            $table->string('slug')->unique();
+            $table->string('image')->nullable(); // Resim yolu
             $table->text('content');
             $table->timestamps();
         });
@@ -20,5 +31,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('blog_posts');
+        Schema::dropIfExists('blog_categories');
     }
 };

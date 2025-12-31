@@ -30,6 +30,9 @@
                         <a href="{{ route('admin.blog.posts.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-primary text-sm font-medium text-gray-900">
                             Yazılar
                         </a>
+                        <a href="{{ route('admin.blog.categories.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-primary text-sm font-medium text-gray-900">
+                            Kategoriler
+                        </a>
                     </div>
                 </div>
 
