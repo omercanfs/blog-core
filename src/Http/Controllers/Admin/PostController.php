@@ -27,12 +27,10 @@ class PostController extends Controller
             'content' => 'required',
         ]);
 
-        // Benzersiz Slug Üretimi
         $slug = Str::slug($request->title);
         $originalSlug = $slug;
         $count = 1;
 
-        // Eğer slug veritabanında varsa sonuna -1, -2 ekle
         while (Post::where('slug', $slug)->exists()) {
             $slug = $originalSlug . '-' . $count;
             $count++;
@@ -48,21 +46,24 @@ class PostController extends Controller
                          ->with('success', 'Blog yazısı başarıyla oluşturuldu.');
     }
 
-    public function edit(Post $post)
+    // 👇 DEĞİŞİKLİK 1: (Post $post) yerine ($id) kullandık
+    public function edit($id)
     {
+        // Pakette ID ile manuel bulmak en güvenli yoldur
+        $post = Post::findOrFail($id); 
+        
         return view('blog-core::admin.posts.edit', compact('post'));
     }
 
-    public function update(Request $request, Post $post)
+    // 👇 DEĞİŞİKLİK 2: Update işleminde de ID kullanıyoruz
+    public function update(Request $request, $id)
     {
+        $post = Post::findOrFail($id);
+
         $data = $request->validate([
             'title'   => 'required|string|max:255',
             'content' => 'required',
         ]);
-
-        // Slug güncelleme mantığı opsiyoneldir. 
-        // Genelde SEO için URL değişmesi istenmez ama başlık değişirse slug da değişsin dersen buraya ekleme yapabiliriz.
-        // Şimdilik sadece title ve content güncelliyoruz.
 
         $post->update($data);
 
@@ -70,9 +71,12 @@ class PostController extends Controller
                          ->with('success', 'Blog yazısı güncellendi.');
     }
 
-    public function destroy(Post $post)
+    // 👇 DEĞİŞİKLİK 3: Silme işleminde de ID kullanıyoruz
+    public function destroy($id)
     {
+        $post = Post::findOrFail($id);
         $post->delete();
+
         return redirect()->route('admin.blog.posts.index')
                          ->with('success', 'Blog yazısı silindi.');
     }
