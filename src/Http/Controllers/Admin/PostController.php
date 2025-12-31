@@ -17,7 +17,7 @@ class PostController extends Controller
 
     public function create()
     {
-        return 'create form later';
+        return view('blog-core::admin.posts.create');
     }
 
     public function store(Request $request)
