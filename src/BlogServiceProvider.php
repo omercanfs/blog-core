@@ -19,7 +19,7 @@ class BlogServiceProvider extends ServiceProvider
 
         // Admin Rotaları
         if (file_exists(__DIR__.'/routes/admin.php')) {
-            Route::middleware(['web']) // Artık hata vermez
+            Route::middleware(['web','auth']) // Artık hata vermez
                  ->group(__DIR__ . '/routes/admin.php');
         }
 
