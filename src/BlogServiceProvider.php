@@ -3,7 +3,7 @@
 namespace Omercanfs\BlogCore;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Route; // 👈 İŞTE BU SATIR EKSİKTİ!
+// use Illuminate\Support\Facades\Route; // Buna artık burada gerek kalmadı
 
 class BlogServiceProvider extends ServiceProvider
 {
@@ -14,13 +14,11 @@ class BlogServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // Web Rotaları (Varsa)
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
 
-        // Admin Rotaları
+        // Admin rotalarını direkt yüklüyoruz, güvenliği dosyanın içinde sağladık
         if (file_exists(__DIR__.'/routes/admin.php')) {
-            Route::middleware(['web','auth','can:view-blog-admin']) // Artık hata vermez
-                 ->group(__DIR__ . '/routes/admin.php');
+            $this->loadRoutesFrom(__DIR__.'/routes/admin.php');
         }
 
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');

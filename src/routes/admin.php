@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Omercanfs\BlogCore\Http\Controllers\Admin\PostController;
 
-Route::prefix('admin/blog')
+Route::middleware(['web', 'auth', 'can:view-blog-admin']) // 🔥 GÜVENLİK BURAYA TAŞINDI
+    ->prefix('admin/blog')
     ->name('admin.blog.')
     ->group(function () {
 
@@ -16,7 +17,6 @@ Route::prefix('admin/blog')
         Route::post('/posts', [PostController::class, 'store'])
             ->name('posts.store');
 
-        // ID parametresini {id} olarak açıkça belirtelim
         Route::get('/posts/{id}/edit', [PostController::class, 'edit'])
             ->name('posts.edit');
 
