@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Omercanfs\BlogCore\Http\Controllers\Admin\PostController;
 
-Route::middleware(['web']) // 👈 EKLENEN KISIM: Session ve $errors değişkenini aktif eder
+Route::middleware(['web','auth', 'can:view-blog-admin']) // 👈 EKLENEN KISIM: Session ve $errors değişkenini aktif eder
     ->prefix('admin/blog')
     ->name('admin.blog.')
     ->group(function () {
