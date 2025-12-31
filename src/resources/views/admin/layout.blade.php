@@ -33,12 +33,24 @@
                     </div>
                 </div>
 
-                <div class="flex items-center">
-                    <a href="{{ url('/') }}" target="_blank" class="text-gray-500 hover:text-gray-700 font-medium text-sm flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                <div class="flex items-center gap-2">
+                    <a href="{{ url('/admin/dashboard') }}" target="_blank" class="text-gray-500 hover:text-gray-700 font-medium text-sm flex items-center">
+                        <!-- Dashboard / Ev ikonu -->
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9v8a2 2 0 01-2 2h-4a2 2 0 01-2-2v-4H9v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-8z" />
+                        </svg>
+                        Admine Dön
+                    </a>
+                    |
+                    <a href="{{ url('/blog') }}" target="_blank" class="text-gray-500 hover:text-gray-700 font-medium text-sm flex items-center">
+                        <!-- Blog / Kalem ikonu -->
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z" />
+                        </svg>
                         Siteyi Görüntüle
                     </a>
                 </div>
+
             </div>
         </div>
     </nav>
