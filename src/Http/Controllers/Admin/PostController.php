@@ -10,8 +10,10 @@ class PostController extends Controller
 {
     public function index()
     {
-        return Post::latest()->get();
+        $posts = Post::latest()->get();
+        return view('blog-core::admin.posts.index', compact('posts'));
     }
+
 
     public function create()
     {
