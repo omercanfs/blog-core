@@ -1,3 +1,7 @@
+<p>
+    <a href="/admin/blog/posts/create">+ Yeni Blog Yazısı</a>
+</p>
+
 <!DOCTYPE html>
 <html>
 <head>
