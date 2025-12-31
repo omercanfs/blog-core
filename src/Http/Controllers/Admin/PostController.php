@@ -47,21 +47,13 @@ class PostController extends Controller
     }
 
     // 👇 DEĞİŞİKLİK 1: (Post $post) yerine ($id) kullandık
-  public function edit($id)
-{
-    // 1. Gelen ID'yi kontrol et
-    $post = Post::find($id);
-
-    // 2. Ekrana bas ve kodun çalışmasını durdur (Debug)
-    dd([
-        'DEBUG_RAPORU' => 'Controller Kontrolü',
-        'Gelen_ID' => $id,
-        'Post_Durumu' => $post ? 'DOLU (Bulundu)' : 'BOŞ (Bulunamadı)',
-        'Post_Verisi' => $post
-    ]);
-
-    return view('blog-core::admin.posts.edit', compact('post'));
-}
+    public function edit($id)
+    {
+        // Pakette ID ile manuel bulmak en güvenli yoldur
+        $post = Post::findOrFail($id); 
+        
+        return view('blog-core::admin.posts.edit', compact('post'));
+    }
 
     // 👇 DEĞİŞİKLİK 2: Update işleminde de ID kullanıyoruz
     public function update(Request $request, $id)

@@ -7,7 +7,7 @@
         <a href="{{ route('admin.blog.posts.index') }}" class="text-gray-600 hover:text-gray-900 text-sm">Listeye Dön</a>
     </div>
 
-    <form action="{{ route('admin.blog.posts.update', $post->id) }}" method="POST" class="p-6">
+    <form method="POST" action="{{ route('admin.blog.posts.update', ['post' => $post->id]) }}" class="p-6">
         @csrf
         @method('PUT')
         
