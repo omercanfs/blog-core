@@ -11,19 +11,19 @@ class BlogServiceProvider extends ServiceProvider
         // Config dosyası varsa burada merge edilir (şimdilik gerek yok)
     }
 
-    public function boot()
+   public function boot()
     {
-        // Rotaları yükle
+        // Web Rotaları (Varsa)
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
-        
+
+        // Admin Rotaları - BURAYI DEĞİŞTİRDİK 👇
+        // loadRoutesFrom yerine Route::middleware... kullanıyoruz.
         if (file_exists(__DIR__.'/routes/admin.php')) {
-            $this->loadRoutesFrom(__DIR__.'/routes/admin.php');
+            Route::middleware(['web']) // Web grubu (Session, Errors, CSRF)
+                 ->group(__DIR__ . '/routes/admin.php');
         }
 
-        // Migrationları yükle
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-
-        // Viewları yükle (NAMESPACE: blog-core)
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'blog-core');
     }
 }

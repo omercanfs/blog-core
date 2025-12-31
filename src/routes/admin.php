@@ -16,12 +16,13 @@ Route::prefix('admin/blog')
         Route::post('/posts', [PostController::class, 'store'])
             ->name('posts.store');
 
-        Route::get('/posts/{post}/edit', [PostController::class, 'edit'])
+        // ID parametresini {id} olarak açıkça belirtelim
+        Route::get('/posts/{id}/edit', [PostController::class, 'edit'])
             ->name('posts.edit');
 
-        Route::put('/posts/{post}', [PostController::class, 'update'])
+        Route::put('/posts/{id}', [PostController::class, 'update'])
             ->name('posts.update');
 
-        Route::delete('/posts/{post}', [PostController::class, 'destroy'])
+        Route::delete('/posts/{id}', [PostController::class, 'destroy'])
             ->name('posts.destroy');
     });
