@@ -13,14 +13,11 @@ class PostController extends Controller
 {
     public function index()
     {
-        // 1. Yazıları sayfalı şekilde çek
+        // Kategorileri çekmeye GEREK YOK.
+        // Sadece postları ve ilişkili kategorilerini çekiyoruz.
         $posts = Post::with('category')->latest()->paginate(10);
         
-        // 2. Kategorileri de çek (Çünkü view dosyan bunu istiyor!)
-        $categories = Category::all(); 
-
-        // 3. Her ikisini de view'a gönder
-        return view('blog-core::admin.posts.index', compact('posts', 'categories'));
+        return view('blog-core::admin.posts.index', compact('posts'));
     }
 
     public function create()
