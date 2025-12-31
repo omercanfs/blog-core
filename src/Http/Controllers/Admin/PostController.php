@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Omercanfs\BlogCore\Models\Post;
 
-
 class PostController extends Controller
 {
     public function index()
@@ -15,7 +14,6 @@ class PostController extends Controller
         $posts = Post::latest()->get();
         return view('blog-core::admin.posts.index', compact('posts'));
     }
-
 
     public function create()
     {
@@ -29,25 +27,26 @@ class PostController extends Controller
             'content' => 'required',
         ]);
 
-        // 👇 SLUG ÜRETİMİ (BURAYA)
+        // Benzersiz Slug Üretimi
         $slug = Str::slug($request->title);
+        $originalSlug = $slug;
+        $count = 1;
 
-        $count = Post::where('slug', 'like', "{$slug}%")->count();
-
-        if ($count > 0) {
-            $slug .= '-' . ($count + 1);
+        // Eğer slug veritabanında varsa sonuna -1, -2 ekle
+        while (Post::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
         }
 
-        // 👇 KAYIT
         Post::create([
             'title' => $request->title,
             'slug' => $slug,
             'content' => $request->content,
         ]);
 
-        return redirect()->route('admin.blog.posts.index');
+        return redirect()->route('admin.blog.posts.index')
+                         ->with('success', 'Blog yazısı başarıyla oluşturuldu.');
     }
-
 
     public function edit(Post $post)
     {
@@ -61,15 +60,20 @@ class PostController extends Controller
             'content' => 'required',
         ]);
 
+        // Slug güncelleme mantığı opsiyoneldir. 
+        // Genelde SEO için URL değişmesi istenmez ama başlık değişirse slug da değişsin dersen buraya ekleme yapabiliriz.
+        // Şimdilik sadece title ve content güncelliyoruz.
+
         $post->update($data);
 
-        return redirect('/admin/blog/posts');
+        return redirect()->route('admin.blog.posts.index')
+                         ->with('success', 'Blog yazısı güncellendi.');
     }
 
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect('/admin/blog/posts');
+        return redirect()->route('admin.blog.posts.index')
+                         ->with('success', 'Blog yazısı silindi.');
     }
-
 }
