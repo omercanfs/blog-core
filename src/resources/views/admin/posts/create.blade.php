@@ -1,83 +1,61 @@
 @extends('blog-core::admin.layout')
 
 @section('content')
-<div class="bg-white shadow-sm sm:rounded-lg">
-    <div class="p-6 border-b border-gray-200">
-        
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-gray-800">Blog Yazıları</h2>
-            <a href="{{ route('admin.blog.posts.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
-                + Yeni Yazı Ekle
-            </a>
-        </div>
-
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resim</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Başlık</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durum</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">İşlemler</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($posts as $post)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            @if($post->image)
-                                <img src="{{ asset('storage/' . $post->image) }}" class="h-10 w-10 rounded object-cover">
-                            @else
-                                <span class="h-10 w-10 rounded bg-gray-200 block"></span>
-                            @endif
-                        </td>
-
-                        <td class="px-6 py-4">
-                            <div class="text-sm font-medium text-gray-900">{{ $post->title }}</div>
-                            <div class="text-sm text-gray-500">{{ Str::limit($post->slug, 20) }}</div>
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            @if($post->category)
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    {{ $post->category->name }}
-                                </span>
-                            @else
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                    Genel
-                                </span>
-                            @endif
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $post->created_at->translatedFormat('d M Y') }}
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ route('admin.blog.posts.edit', $post->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Düzenle</a>
-                            
-                            <form action="{{ route('admin.blog.posts.destroy', $post->id) }}" method="POST" class="inline" onsubmit="return confirm('Bu yazıyı silmek istediğinize emin misiniz?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">Sil</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                            Henüz hiç yazı eklenmemiş.
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mt-4">
-            {{ $posts->links() }}
-        </div>
+<div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden mb-10">
+    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-800">Yeni Blog Yazısı Ekle</h2>
+        <a href="{{ route('admin.blog.posts.index') }}" class="text-gray-600 hover:text-gray-900 text-sm">Listeye Dön</a>
     </div>
+
+    <form action="{{ route('admin.blog.posts.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+        @csrf
+        
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Başlık</label>
+            <input type="text" name="title" class="border rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Yazı başlığını girin..." required>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Kategori</label>
+                <select name="category_id" class="border rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Kategori Seçin (Opsiyonel)</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Kapak Resmi</label>
+                <input type="file" name="image" class="border rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2">İçerik</label>
+            <textarea name="content" id="editor" rows="10" class="border rounded w-full py-2 px-3"></textarea>
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition duration-150">
+                Kaydet ve Yayınla
+            </button>
+        </div>
+
+    </form>
 </div>
+
+<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+<script>
+    // 'editor' id'li textarea'yı CKEditor'e çevir
+    CKEDITOR.replace('editor', {
+        height: 400, // Editör yüksekliği
+        language: 'tr', // Türkçe dil desteği
+        filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images', // İleride dosya yöneticisi eklersek burası lazım olacak
+        filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+        filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+        filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+    });
+</script>
 @endsection
