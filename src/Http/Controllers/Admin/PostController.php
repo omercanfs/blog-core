@@ -51,32 +51,28 @@ class PostController extends Controller
         return view('blog-core::admin.posts.create', compact('categories'));
     }
 
+  // STORE METODU İÇİN DE AYNISINI YAPMAYI UNUTMA
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
+        $data = $request->validate([
+            'title'       => 'required|string|max:255',
+            'content'     => 'required',
             'category_id' => 'nullable|exists:blog_categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $imagePath = null;
+        // Slug oluştur
+        $data['slug'] = Str::slug($request->title);
+        
+        // Status ekle
+        $data['status'] = $request->has('status') ? true : false;
+
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('blog', 'public');
+            $data['image'] = $request->file('image')->store('blog', 'public');
         }
 
-        $slug = Str::slug($request->title);
-        // İleride slug unique kontrolü eklemelisin: while(Post::where('slug', $slug)->exists()) { ... }
+        Post::create($data);
 
-        Post::create([
-            'title' => $request->title,
-            'slug' => $slug,
-            'content' => $request->content,
-            'category_id' => $request->category_id,
-            'image' => $imagePath,
-        ]);
-
-        // Route isminin doğru olduğundan emin ol (routes.php kontrolü)
         return redirect()->route('admin.blog.posts.index')->with('success', 'Yazı eklendi.');
     }
 
@@ -91,13 +87,21 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
         
+        // 1. Doğrulama (Validate)
+        // Dikkat: validate fonksiyonu sadece buradaki alanları $data değişkenine döndürür.
         $data = $request->validate([
-            'title'   => 'required|string|max:255',
-            'content' => 'required',
+            'title'       => 'required|string|max:255',
+            'content'     => 'required',
             'category_id' => 'nullable|exists:blog_categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
+        // 2. CHECKBOX KONTROLÜ (Kritik Nokta Burası)
+        // Checkbox işaretliyse request'te 'status' vardır -> true yap
+        // İşaretli değilse request'te yoktur -> false yap
+        $data['status'] = $request->has('status') ? true : false;
+
+        // 3. Resim İşlemleri
         if ($request->hasFile('image')) {
             if($post->image) {
                 Storage::disk('public')->delete($post->image);
@@ -105,11 +109,10 @@ class PostController extends Controller
             $data['image'] = $request->file('image')->store('blog', 'public');
         }
         
-        // Slug güncellemek istersen buraya ekleyebilirsin ama genelde SEO için sabit kalır.
-
+        // 4. Güncelleme
         $post->update($data);
 
-        return redirect()->route('admin.blog.posts.index')->with('success', 'Güncellendi.');
+        return redirect()->route('admin.blog.posts.index')->with('success', 'Yazı güncellendi.');
     }
 
     public function destroy($id)
