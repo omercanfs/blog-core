@@ -48,9 +48,12 @@
                 <a href="{{ route('blog.index') }}" class="flex items-center gap-2 group">
     
                     <div class="bg-indigo-600 text-white p-1.5 rounded-lg group-hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 5h3a6 6 0 0 1 0 12H4V5z"></path> <path d="M15 5v14"></path> <path d="M15 12l5-5"></path>
-                            <path d="M15 12l5 5"></path>
+                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="9"></rect>
+                            <rect x="14" y="3" width="7" height="5"></rect>
+                            <path d="M14 12h7"></path>
+                            <path d="M3 17h18"></path>
+                            <path d="M3 21h18"></path>
                         </svg>
                     </div>
 
