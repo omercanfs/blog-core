@@ -97,21 +97,20 @@ class PostController extends Controller
 
     public function show($slug)
     {
+        // 1. Yazıyı Bul
         $post = Post::where('slug', $slug)->firstOrFail();
 
-        // Kullanıcı bu yazıyı bu oturumda daha önce görmediyse artır
-        $sessionKey = 'viewed_post_' . $post->id;
-        if (!session()->has($sessionKey)) {
-            $post->increment('view_count');
-            session()->put($sessionKey, true);
-        }
+        // 2. SAYIYI ARTIR (Yeni Eklenen Satır)
+        $post->increment('view_count');
 
+        // 3. İlişkili Yazıları Getir (Varsa)
         $relatedPosts = Post::where('category_id', $post->category_id)
                             ->where('id', '!=', $post->id)
                             ->latest()
                             ->take(3)
                             ->get();
 
+        // 4. Görünüme Gönder
         return view('blog-core::front.show', compact('post', 'relatedPosts'));
     }
 }
