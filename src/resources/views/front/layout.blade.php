@@ -78,7 +78,7 @@
         <div class="max-w-7xl mx-auto px-4 py-8 md:py-12">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="text-center md:text-left">
-                    <p class="font-bold text-slate-800">{{ config('app.name', 'DijitalKöy'); }}</p>
+                    <p class="font-bold text-slate-800"><span class="text-indigo-600">Blog</span>{{ config('app.name', 'DijitalKöy'); }}</p>
                     <p class="text-sm text-slate-500 mt-1">Güncel yazılarımız ve haberlerimizden haberdar olun.</p>
                 </div>
                 <div class="text-sm text-slate-400">
