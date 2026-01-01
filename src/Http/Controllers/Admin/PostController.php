@@ -94,4 +94,24 @@ class PostController extends Controller
         $post->delete();
         return redirect()->route('admin.blog.posts.index');
     }
+
+    public function show($slug)
+    {
+        // Postu bul
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        // --- EKLENECEK KOD ---
+        // Veritabanındaki sayıyı 1 artırır ve kaydeder.
+        $post->increment('view_count');
+        // ---------------------
+
+        // Diğer kodların (Benzer yazılar vb.)
+        $relatedPosts = Post::where('category_id', $post->category_id)
+                            ->where('id', '!=', $post->id)
+                            ->latest()
+                            ->take(3)
+                            ->get();
+
+        return view('blog-core::front.show', compact('post', 'relatedPosts'));
+    }
 }
