@@ -11,7 +11,7 @@
         </a>
         @foreach($categories as $cat)
             {{-- SADECE YAZI SAYISI 0'DAN BÜYÜKSE GÖSTER --}}
-            @if($cat->posts_count > 0)
+            @if($cat->active_posts_count > 0)
                 <a href="{{ route('blog.category', $cat->slug) }}" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200' }}">
                     {{ $cat->name }}
                 </a>
@@ -111,7 +111,7 @@
                     <a href="{{ route('blog.category', $cat->slug) }}" class="...">
                         <span>{{ $cat->name }}</span>
                         <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">
-                            {{ $cat->posts_count }}
+                            {{ $cat->active_posts_count }}
                         </span>
                     </a>
                 @endforeach

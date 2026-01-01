@@ -125,7 +125,7 @@
                     <li>
                         <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center text-slate-600 hover:text-blue-600 hover:bg-slate-50 px-2 py-1.5 rounded transition">
                             <span>{{ $cat->name }}</span>
-                            <span class="text-xs text-slate-400">({{ $cat->posts_count }})</span>
+                            <span class="text-xs text-slate-400">({{ $cat->active_posts_count }})</span>
                         </a>
                     </li>
                 @endforeach

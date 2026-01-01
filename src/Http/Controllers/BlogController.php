@@ -18,11 +18,9 @@ class BlogController extends Controller
                      ->paginate(9);
 
         // 2. Kategorileri getir ama sayıları sadece YAYINDAKİLER için say
-        $categories = Category::withCount(['posts' => function ($query) {
-            $query->active(); // Modeldeki scopeActive($query) fonksiyonunu çalıştırır
-        }])
-        ->having('posts_count', '>', 0) // Sadece sayısı 0'dan büyük olanları getir
-        ->get();
+        $categories = Category::withCount('activePosts')
+            ->having('active_posts_count', '>', 0) // 0 olanları veritabanından hiç çekme
+            ->get();
         
         return view('blog-core::front.index', compact('posts', 'categories'));
     }
@@ -40,11 +38,9 @@ class BlogController extends Controller
                           ->paginate(9);
 
         // 2. Yan menü sayılarını yine doğru say
-        $categories = Category::withCount(['posts' => function ($query) {
-            $query->active(); // Modeldeki scopeActive($query) fonksiyonunu çalıştırır
-        }])
-        ->having('posts_count', '>', 0) // Sadece sayısı 0'dan büyük olanları getir
-        ->get();
+        $categories = Category::withCount('activePosts')
+            ->having('active_posts_count', '>', 0) // 0 olanları veritabanından hiç çekme
+            ->get();
 
         return view('blog-core::front.index', compact('posts', 'categories', 'category'));
     }
@@ -56,11 +52,9 @@ class BlogController extends Controller
         $post = Post::active()->where('slug', $slug)->firstOrFail();
         
         // Yan menü kategorileri (Sayılar düzeltilmiş)
-        $categories = Category::withCount(['posts' => function ($query) {
-            $query->active(); // Modeldeki scopeActive($query) fonksiyonunu çalıştırır
-        }])
-        ->having('posts_count', '>', 0) // Sadece sayısı 0'dan büyük olanları getir
-        ->get();
+        $categories = Category::withCount('activePosts')
+            ->having('active_posts_count', '>', 0) // 0 olanları veritabanından hiç çekme
+            ->get();
 
         // Okunma sayısını artır
         $post->increment('view_count');

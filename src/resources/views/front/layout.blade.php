@@ -65,10 +65,10 @@
                             
                             {{-- DİKKAT: Controller'dan status=1 olanları saydırdık. --}}
                             {{-- Eğer sayı 0'dan büyükse demek ki içinde YAYINDA yazı var. Gösterelim. --}}
-                            @if($cat->posts_count > 0)
+                            @if($cat->active_posts_count > 0)
                                 <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
                                     <span>{{ $cat->name }}</span>
-                                    <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $cat->posts_count }}</span>
+                                    <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $cat->active_posts_count }}</span>
                                 </a>
                             @endif
 
