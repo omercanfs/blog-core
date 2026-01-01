@@ -24,6 +24,11 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('image')->nullable(); // Resim yolu
             $table->text('content');
+            
+            // --- YENİ EKLENEN SÜTUN ---
+            $table->unsignedBigInteger('view_count')->default(0); // Görüntülenme sayısı (Varsayılan 0)
+            // --------------------------
+
             $table->timestamps();
         });
     }
