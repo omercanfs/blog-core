@@ -19,8 +19,9 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Başlık</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durum</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">İşlemler</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Okunma</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">İşlemler</th>
+            
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -55,15 +56,6 @@
                             {{ $post->created_at->translatedFormat('d M Y') }}
                         </td>
 
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ route('admin.blog.posts.edit', $post->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Düzenle</a>
-                            
-                            <form action="{{ route('admin.blog.posts.destroy', $post->id) }}" method="POST" class="inline" onsubmit="return confirm('Bu yazıyı silmek istediğinize emin misiniz?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">Sil</button>
-                            </form>
-                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center text-sm text-gray-900">
                                 <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,6 +65,17 @@
                                 {{ number_format($post->view_count) }}
                             </div>
                         </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="{{ route('admin.blog.posts.edit', $post->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Düzenle</a>
+                            
+                            <form action="{{ route('admin.blog.posts.destroy', $post->id) }}" method="POST" class="inline" onsubmit="return confirm('Bu yazıyı silmek istediğinize emin misiniz?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-900">Sil</button>
+                            </form>
+                        </td>
+                        
                     </tr>
                     @empty
                     <tr>
