@@ -12,7 +12,6 @@
     
     <style>
         body { font-family: 'Inter', sans-serif; }
-        /* Yatay Scroll Gizleme (Estetik İçin) */
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -34,7 +33,6 @@
                         </svg>
                     </div>
 
-
                     <div class="flex flex-col">
                         <span class="text-xl font-bold text-slate-800 leading-none tracking-tight">
                             <span class="text-indigo-600">Blog</span>{{ config('app.name', 'DijitalKöy'); }}
@@ -46,7 +44,7 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="/" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition">Ana Site</a>
                     <a href="{{ route('blog.index') }}" class="text-sm font-medium text-blue-600">Blog Anasayfa</a>
-                    </div>
+                </div>
 
                 <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-md text-slate-600 hover:bg-slate-100 focus:outline-none">
                     <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -64,10 +62,13 @@
                     <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Kategoriler</p>
                     @if(isset($categories))
                         @foreach($categories as $cat)
-                            <a href="{{ route('blog.category', $cat->slug) }}" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
-                                {{ $cat->name }}
-                            </a>
-                        @endforeach
+                            @if($cat->posts_count > 0)
+                                <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+                                    <span>{{ $cat->name }}</span>
+                                    <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $cat->posts_count }}</span>
+                                </a>
+                            @endif
+                            @endforeach
                     @endif
                 </div>
             </div>
