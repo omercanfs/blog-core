@@ -1,18 +1,3 @@
-@php
-    $host = request()->getHost();
-    $host = str_replace('www.', '', $host);
-    
-    // Site adını bul
-    if (filter_var($host, FILTER_VALIDATE_IP) || $host === 'localhost') {
-        // Localde .env dosyasındaki ismi al (Örn: DijitalKöy)
-        $siteName = config('app.name', 'DijitalKöy'); 
-    } else {
-        // Canlıda domain adını al (Örn: dijitalkoy.com -> Dijitalkoy)
-        $parts = explode('.', $host);
-        $siteName = ucfirst($parts[0]);
-    }
-@endphp
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -48,7 +33,7 @@
 
                     <div class="flex flex-col">
                         <span class="text-xl font-bold text-slate-800 leading-none tracking-tight">
-                            <span class="text-indigo-600">Blog</span>{{ $siteName }}
+                            <span class="text-indigo-600">Blog</span>{{ config('app.name', 'DijitalKöy'); }}
                         </span>
                         <span class="text-[10px] text-slate-400 font-medium tracking-wide">GÜNCEL İÇERİKLER</span>
                     </div>
