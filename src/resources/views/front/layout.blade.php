@@ -1,3 +1,25 @@
+@php
+    // 1. Domaini al (örn: www.dijitalkoy.com)
+    $host = request()->getHost();
+    
+    // 2. www. kısmını temizle
+    $host = str_replace('www.', '', $host);
+
+    // 3. İsmi parçala (Noktaya göre)
+    $parts = explode('.', $host);
+    
+    // 4. Ana isim ve Uzantıyı ayarla
+    if (count($parts) >= 2) {
+        // Normal domain (dijitalkoy . com)
+        $mainName = ucfirst($parts[0]); // Baş harfi büyüt (Dijitalkoy)
+        $extension = '.' . $parts[1];   // Uzantı (.com)
+    } else {
+        // Localhost veya IP ise APP_NAME kullan
+        $mainName = config('app.name', 'Blog');
+        $extension = ''; 
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -24,10 +46,20 @@
             <div class="flex justify-between items-center h-16">
                 
                 <a href="{{ route('blog.index') }}" class="flex items-center gap-2 group">
-                    <div class="bg-blue-600 text-white p-1.5 rounded-lg group-hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+    
+                    <div class="bg-indigo-600 text-white p-1.5 rounded-lg group-hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
+                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 5h3a6 6 0 0 1 0 12H4V5z"></path> <path d="M15 5v14"></path> <path d="M15 12l5-5"></path>
+                            <path d="M15 12l5 5"></path>
+                        </svg>
                     </div>
-                    <span class="text-xl font-bold text-slate-800 tracking-tight">Blog<span class="text-blue-600">Core</span></span>
+
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold text-slate-800 leading-none tracking-tight">
+                            {{ $mainName }}<span class="text-indigo-600">{{ $extension }}</span>
+                        </span>
+                        <span class="text-[10px] text-slate-400 font-medium tracking-wide">BLOG & HABERLER</span>
+                    </div>
                 </a>
 
                 <div class="hidden md:flex items-center space-x-8">
