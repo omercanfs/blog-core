@@ -1,6 +1,6 @@
 <?php
 
-namespace Omercanfs\BlogCore\Http\Controllers\Front; // Namespace'in Front klasöründe olduğundan emin ol
+namespace Omercanfs\BlogCore\Http\Controllers; // Namespace'in Front klasöründe olduğundan emin ol
 
 use Illuminate\Routing\Controller;
 use Omercanfs\BlogCore\Models\Post;
