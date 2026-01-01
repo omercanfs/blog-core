@@ -29,7 +29,7 @@
                 @if(isset($category))
                     "{{ $category->name }}" kategorisindeki içerikler listeleniyor. <a href="{{ route('blog.index') }}" class="text-blue-600 hover:underline font-medium">Tümüne dön</a>
                 @else
-                    Yazılım, teknoloji ve dijital dünyaya dair en güncel makaleler.
+                    Güncel yazılarımız ve haberlerimizden haberdar olun.
                 @endif
             </p>
         </div>
@@ -113,12 +113,7 @@
             </div>
         </div>
 
-        <div class="bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl p-6 text-white text-center shadow-lg shadow-blue-200">
-            <h4 class="font-bold text-lg mb-2">Bültenimize Katılın</h4>
-            <p class="text-xs text-blue-100 mb-4">En yeni yazılardan ilk sizin haberiniz olsun.</p>
-            <input type="email" placeholder="E-posta adresiniz" class="w-full text-sm px-3 py-2 rounded-lg text-slate-800 focus:outline-none mb-2">
-            <button class="w-full bg-white text-blue-600 text-sm font-bold py-2 rounded-lg hover:bg-blue-50 transition">Abone Ol</button>
-        </div>
+       
 
     </div>
 
