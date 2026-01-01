@@ -10,9 +10,12 @@
             Tümü
         </a>
         @foreach($categories as $cat)
-            <a href="{{ route('blog.category', $cat->slug) }}" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200' }}">
-                {{ $cat->name }}
-            </a>
+            {{-- SADECE YAZI SAYISI 0'DAN BÜYÜKSE GÖSTER --}}
+            @if($cat->posts_count > 0)
+                <a href="{{ route('blog.category', $cat->slug) }}" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200' }}">
+                    {{ $cat->name }}
+                </a>
+            @endif
         @endforeach
     </div>
 </div>
@@ -83,7 +86,7 @@
                 <div class="col-span-1 md:col-span-2 text-center py-16 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
                     <div class="text-5xl mb-4">📭</div>
                     <h3 class="text-lg font-bold text-slate-700">Henüz Yazı Yok</h3>
-                    <p class="text-slate-500">Bu kategoride henüz içerik eklenmemiş.</p>
+                    <p class="text-slate-500">Bu kategoride henüz içerik eklenmemiş veya yayında değil.</p>
                 </div>
             @endforelse
         </div>
@@ -104,16 +107,19 @@
                 <a href="{{ route('blog.index') }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition {{ !isset($category) ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
                     <span>Tümü</span>
                 </a>
+                
                 @foreach($categories as $cat)
-                    <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
-                        <span>{{ $cat->name }}</span>
-                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $cat->posts_count }}</span>
-                    </a>
+                    {{-- BURADAKİ KONTROL SAYESİNDE BOŞ KATEGORİLER GİZLENİR --}}
+                    @if($cat->posts_count > 0)
+                        <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                            <span>{{ $cat->name }}</span>
+                            {{-- posts_count Controller'dan filtrelenmiş olarak geliyor --}}
+                            <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $cat->posts_count }}</span>
+                        </a>
+                    @endif
                 @endforeach
             </div>
         </div>
-
-       
 
     </div>
 
