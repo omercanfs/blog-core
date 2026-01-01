@@ -108,13 +108,12 @@
                 </a>
                 
                 @foreach($categories as $cat)
-                    {{-- AYNI KONTROL BURADA DA VAR --}}
-                    @if($cat->posts_count > 0)
-                        <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition text-slate-600 hover:bg-slate-50">
-                            <span>{{ $cat->name }}</span>
-                            <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $cat->posts_count }}</span>
-                        </a>
-                    @endif
+                    <a href="{{ route('blog.category', $cat->slug) }}" class="...">
+                        <span>{{ $cat->name }}</span>
+                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">
+                            {{ $cat->posts_count }}
+                        </span>
+                    </a>
                 @endforeach
             </div>
         </div>

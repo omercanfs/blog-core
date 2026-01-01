@@ -19,8 +19,10 @@ class BlogController extends Controller
 
         // 2. Kategorileri getir ama sayıları sadece YAYINDAKİLER için say
         $categories = Category::withCount(['posts' => function ($query) {
-            $query->where('status', 1);
-        }])->get(); 
+            $query->active(); // Modeldeki scopeActive($query) fonksiyonunu çalıştırır
+        }])
+        ->having('posts_count', '>', 0) // Sadece sayısı 0'dan büyük olanları getir
+        ->get();
         
         return view('blog-core::front.index', compact('posts', 'categories'));
     }
@@ -39,8 +41,10 @@ class BlogController extends Controller
 
         // 2. Yan menü sayılarını yine doğru say
         $categories = Category::withCount(['posts' => function ($query) {
-            $query->where('status', 1);
-        }])->get();
+            $query->active(); // Modeldeki scopeActive($query) fonksiyonunu çalıştırır
+        }])
+        ->having('posts_count', '>', 0) // Sadece sayısı 0'dan büyük olanları getir
+        ->get();
 
         return view('blog-core::front.index', compact('posts', 'categories', 'category'));
     }
@@ -53,8 +57,10 @@ class BlogController extends Controller
         
         // Yan menü kategorileri (Sayılar düzeltilmiş)
         $categories = Category::withCount(['posts' => function ($query) {
-            $query->where('status', 1);
-        }])->get();
+            $query->active(); // Modeldeki scopeActive($query) fonksiyonunu çalıştırır
+        }])
+        ->having('posts_count', '>', 0) // Sadece sayısı 0'dan büyük olanları getir
+        ->get();
 
         // Okunma sayısını artır
         $post->increment('view_count');
