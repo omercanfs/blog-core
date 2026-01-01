@@ -20,7 +20,9 @@ class PostController extends Controller
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
-        if ($request->filled('status')) {
+        // filled() yerine doğrudan boşluk kontrolü yapıyoruz.
+        // Çünkü "0" değeri filled fonksiyonunda false dönebilir.
+        if ($request->has('status') && $request->status != '') {
             $query->where('status', $request->status);
         }
         if ($request->filled('category_id')) {
