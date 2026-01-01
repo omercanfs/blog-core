@@ -1,22 +1,15 @@
 @php
-    // 1. Domaini al (örn: www.dijitalkoy.com)
     $host = request()->getHost();
-    
-    // 2. www. kısmını temizle
     $host = str_replace('www.', '', $host);
-
-    // 3. İsmi parçala (Noktaya göre)
-    $parts = explode('.', $host);
     
-    // 4. Ana isim ve Uzantıyı ayarla
-    if (count($parts) >= 2) {
-        // Normal domain (dijitalkoy . com)
-        $mainName = ucfirst($parts[0]); // Baş harfi büyüt (Dijitalkoy)
-        $extension = '.' . $parts[1];   // Uzantı (.com)
+    // Site adını bul
+    if (filter_var($host, FILTER_VALIDATE_IP) || $host === 'localhost') {
+        // Localde .env dosyasındaki ismi al (Örn: DijitalKöy)
+        $siteName = config('app.name', 'DijitalKöy'); 
     } else {
-        // Localhost veya IP ise APP_NAME kullan
-        $mainName = config('app.name', 'Blog');
-        $extension = ''; 
+        // Canlıda domain adını al (Örn: dijitalkoy.com -> Dijitalkoy)
+        $parts = explode('.', $host);
+        $siteName = ucfirst($parts[0]);
     }
 @endphp
 
@@ -45,7 +38,7 @@
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 
-                <a href="{{ route('blog.index') }}" class="flex items-center gap-2 group">
+               <a href="{{ route('blog.index') }}" class="flex items-center gap-2 group">
     
                     <div class="bg-indigo-600 text-white p-1.5 rounded-lg group-hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
                         <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -55,9 +48,9 @@
 
                     <div class="flex flex-col">
                         <span class="text-xl font-bold text-slate-800 leading-none tracking-tight">
-                            {{ $mainName }}<span class="text-indigo-600">{{ $extension }}</span>
+                            <span class="text-indigo-600">Blog</span>{{ $siteName }}
                         </span>
-                        <span class="text-[10px] text-slate-400 font-medium tracking-wide">BLOG & HABERLER</span>
+                        <span class="text-[10px] text-slate-400 font-medium tracking-wide">GÜNCEL İÇERİKLER</span>
                     </div>
                 </a>
 
