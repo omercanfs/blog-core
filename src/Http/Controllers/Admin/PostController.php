@@ -7,17 +7,48 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Omercanfs\BlogCore\Models\Post;
-use Omercanfs\BlogCore\Models\Category; // Eklendi
+use Omercanfs\BlogCore\Models\Category;
 
 class PostController extends Controller
 {
-    public function index()
+   public function index(Request $request)
     {
-        // Kategorileri çekmeye GEREK YOK.
-        // Sadece postları ve ilişkili kategorilerini çekiyoruz.
-        $posts = Post::with('category')->latest()->paginate(10);
-        
-        return view('blog-core::admin.posts.index', compact('posts'));
+        // 1. Sorguyu Başlat
+        $query = Post::with('category');
+
+        // 2. Arama Filtresi (Başlıkta Ara)
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        // 3. Kategori Filtresi
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // 4. Sıralama (Okunma sayısı veya Tarih)
+        switch ($request->sort) {
+            case 'view_desc':
+                $query->orderBy('view_count', 'desc'); // Çok okunan en üstte
+                break;
+            case 'view_asc':
+                $query->orderBy('view_count', 'asc'); // Az okunan en üstte
+                break;
+            case 'oldest':
+                $query->oldest(); // En eski
+                break;
+            default:
+                $query->latest(); // Varsayılan: En yeni
+                break;
+        }
+
+        // 5. Sayfalama (Filtreleri linklerde koru)
+        $posts = $query->paginate(10)->withQueryString();
+
+        // 6. Kategorileri de gönder (Select kutusu için)
+        $categories = Category::all();
+
+        return view('blog-core::admin.post.index', compact('posts', 'categories'));
     }
 
     public function create()
