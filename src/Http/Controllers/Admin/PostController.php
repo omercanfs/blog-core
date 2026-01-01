@@ -97,15 +97,15 @@ class PostController extends Controller
 
     public function show($slug)
     {
-        // Postu bul
         $post = Post::where('slug', $slug)->firstOrFail();
 
-        // --- EKLENECEK KOD ---
-        // Veritabanındaki sayıyı 1 artırır ve kaydeder.
-        $post->increment('view_count');
-        // ---------------------
+        // Kullanıcı bu yazıyı bu oturumda daha önce görmediyse artır
+        $sessionKey = 'viewed_post_' . $post->id;
+        if (!session()->has($sessionKey)) {
+            $post->increment('view_count');
+            session()->put($sessionKey, true);
+        }
 
-        // Diğer kodların (Benzer yazılar vb.)
         $relatedPosts = Post::where('category_id', $post->category_id)
                             ->where('id', '!=', $post->id)
                             ->latest()
