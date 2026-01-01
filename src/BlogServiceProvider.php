@@ -3,7 +3,7 @@
 namespace Omercanfs\BlogCore;
 
 use Illuminate\Support\ServiceProvider;
-// use Illuminate\Support\Facades\Route; // Buna artık burada gerek kalmadı
+use Omercanfs\BlogCore\View\Components\BlogWidget;
 
 class BlogServiceProvider extends ServiceProvider
 {
@@ -27,5 +27,8 @@ class BlogServiceProvider extends ServiceProvider
         // Diğer yüklemeler...
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'blog-core');
+
+        // Bileşeni 'x-blog-widget' olarak kullanabilmek için kaydediyoruz
+        Blade::component('blog-widget', BlogWidget::class);
     }
 }
