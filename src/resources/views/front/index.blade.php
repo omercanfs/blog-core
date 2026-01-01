@@ -100,20 +100,18 @@
         
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 sticky top-24">
             <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
                 Kategoriler
             </h3>
             <div class="space-y-1">
-                <a href="{{ route('blog.index') }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition {{ !isset($category) ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                <a href="{{ route('blog.index') }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition ...">
                     <span>Tümü</span>
                 </a>
                 
                 @foreach($categories as $cat)
-                    {{-- BURADAKİ KONTROL SAYESİNDE BOŞ KATEGORİLER GİZLENİR --}}
+                    {{-- AYNI KONTROL BURADA DA VAR --}}
                     @if($cat->posts_count > 0)
-                        <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                        <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition text-slate-600 hover:bg-slate-50">
                             <span>{{ $cat->name }}</span>
-                            {{-- posts_count Controller'dan filtrelenmiş olarak geliyor --}}
                             <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $cat->posts_count }}</span>
                         </a>
                     @endif
