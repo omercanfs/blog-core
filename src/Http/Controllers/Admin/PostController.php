@@ -95,25 +95,4 @@ class PostController extends Controller
         return redirect()->route('admin.blog.posts.index');
     }
 
-    public function show($slug)
-    {
-        dd('Burası Çalışıyor');
-        
-        // 1. Yazıyı Bul
-        $post = Post::where('slug', $slug)->firstOrFail();
-
-        // YÖNTEM 2 (Garanti): Manuel artırıp kaydet
-        $post->view_count = $post->view_count + 1;
-        $post->save(); // <--- Save işlemi hata varsa ekrana basar
-
-        // 3. İlişkili Yazıları Getir (Varsa)
-        $relatedPosts = Post::where('category_id', $post->category_id)
-                            ->where('id', '!=', $post->id)
-                            ->latest()
-                            ->take(3)
-                            ->get();
-
-        // 4. Görünüme Gönder
-        return view('blog-core::front.show', compact('post', 'relatedPosts'));
-    }
 }

@@ -36,6 +36,10 @@ class BlogController extends Controller
         // Yan menü için kategoriler
         $categories = Category::withCount('posts')->get();
 
+
+         // Veritabanındaki sayıyı 1 artırır ve kaydeder.
+        $post->increment('view_count');
+
         // Benzer Yazılar (Aynı kategorideki diğer 3 yazı)
         $relatedPosts = Post::where('category_id', $post->category_id)
                             ->where('id', '!=', $post->id) // Kendisini hariç tut
@@ -45,4 +49,5 @@ class BlogController extends Controller
 
         return view('blog-core::front.show', compact('post', 'categories', 'relatedPosts'));
     }
+    
 }
