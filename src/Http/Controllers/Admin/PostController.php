@@ -11,49 +11,46 @@ use Omercanfs\BlogCore\Models\Category;
 
 class PostController extends Controller
 {
-   public function index(Request $request)
+    public function index(Request $request)
     {
-        // 1. Sorguyu Başlat
         $query = Post::with('category');
 
-        // 2. Arama Filtresi (Başlıkta Ara)
+        // Arama
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        // 3. Kategori Filtresi
+        // Kategori
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
 
-        // 4. Sıralama (Okunma sayısı veya Tarih)
+        // Sıralama
         switch ($request->sort) {
             case 'view_desc':
-                $query->orderBy('view_count', 'desc'); // Çok okunan en üstte
+                $query->orderBy('view_count', 'desc');
                 break;
             case 'view_asc':
-                $query->orderBy('view_count', 'asc'); // Az okunan en üstte
+                $query->orderBy('view_count', 'asc');
                 break;
             case 'oldest':
-                $query->oldest(); // En eski
+                $query->oldest();
                 break;
             default:
-                $query->latest(); // Varsayılan: En yeni
+                $query->latest();
                 break;
         }
 
-        // 5. Sayfalama (Filtreleri linklerde koru)
         $posts = $query->paginate(10)->withQueryString();
-
-        // 6. Kategorileri de gönder (Select kutusu için)
         $categories = Category::all();
 
-        return view('blog-core::admin.post.index', compact('posts', 'categories'));
+        // 👇 DÜZELTME: 'post' yerine 'posts' (Çoğul) yapıldı.
+        return view('blog-core::admin.posts.index', compact('posts', 'categories'));
     }
 
     public function create()
     {
-        $categories = Category::all(); // Seçim kutusu için
+        $categories = Category::all();
         return view('blog-core::admin.posts.create', compact('categories'));
     }
 
@@ -66,15 +63,13 @@ class PostController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Resim Yükleme
         $imagePath = null;
         if ($request->hasFile('image')) {
-            // storage/app/public/blog klasörüne kaydeder
             $imagePath = $request->file('image')->store('blog', 'public');
         }
 
         $slug = Str::slug($request->title);
-        // (Slug benzersizlik kontrol kodların buraya...)
+        // İleride slug unique kontrolü eklemelisin: while(Post::where('slug', $slug)->exists()) { ... }
 
         Post::create([
             'title' => $request->title,
@@ -84,6 +79,7 @@ class PostController extends Controller
             'image' => $imagePath,
         ]);
 
+        // Route isminin doğru olduğundan emin ol (routes.php kontrolü)
         return redirect()->route('admin.blog.posts.index')->with('success', 'Yazı eklendi.');
     }
 
@@ -106,9 +102,13 @@ class PostController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            // Eski resmi sil istersen: Storage::disk('public')->delete($post->image);
+            if($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
             $data['image'] = $request->file('image')->store('blog', 'public');
         }
+        
+        // Slug güncellemek istersen buraya ekleyebilirsin ama genelde SEO için sabit kalır.
 
         $post->update($data);
 
@@ -118,12 +118,10 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
-        // Resmi de silebilirsin
         if($post->image) {
              Storage::disk('public')->delete($post->image);
         }
         $post->delete();
         return redirect()->route('admin.blog.posts.index');
     }
-
 }
