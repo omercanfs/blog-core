@@ -51,9 +51,14 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <a href="{{ url('/') }}" target="_blank" class="text-xs font-semibold text-slate-500 hover:text-indigo-600 flex items-center gap-1 transition">
+                    <a href="{{ url('/admin/dashboard') }}" target="_blank" class="text-xs font-semibold text-slate-500 hover:text-indigo-600 flex items-center gap-1 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        Siteyi Gör
+                        Süper Admin
+                    </a>
+                    |
+                    <a href="{{ url('/blog') }}" target="_blank" class="text-xs font-semibold text-slate-500 hover:text-indigo-600 flex items-center gap-1 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        Blog'a Git
                     </a>
                 </div>
             </div>

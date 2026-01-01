@@ -9,7 +9,10 @@
     <div class="flex flex-col md:flex-row gap-6">
         
         <div class="w-full md:w-3/4 space-y-6">
-            
+             <a href="{{ route('admin.blog.posts.index') }}" class="inline-flex items-center text-sm text-slate-500 hover:text-slate-800 mb-4 transition">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Blog Listesine Dön
+            </a>    
             <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Yazı Başlığı</label>
                 <input type="text" name="title" 
@@ -24,7 +27,7 @@
         </div>
 
         <div class="w-full md:w-1/4 space-y-6">
-            
+            <br>
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 sticky top-24">
                 <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Yayınlama</h3>
                 
@@ -35,7 +38,7 @@
                     </button>
                 </div>
                 
-                <a href="{{ route('admin.blog.posts.index') }}" class="block text-center text-sm text-slate-500 hover:text-slate-800 transition">İptal et ve dön</a>
+                <a href="{{ route('admin.blog.posts.index') }}" class="block text-center text-sm text-slate-500 hover:text-slate-800 transition">Blog Listesine Dön</a>
             </div>
 
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
