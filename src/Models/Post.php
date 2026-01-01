@@ -14,6 +14,7 @@ class Post extends Model
         'slug',
         'image',       // Yeni
         'content',
+        'view_count',
     ];
 
     public function category()
