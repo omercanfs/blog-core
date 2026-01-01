@@ -19,7 +19,7 @@ class BlogController extends Controller
 
         // 2. Kategorileri getir ama sayıları sadece YAYINDAKİLER için say
         $categories = Category::withCount(['posts' => function ($query) {
-            $query->where('status', true);
+            $query->where('status', 1);
         }])->get(); 
         
         return view('blog-core::front.index', compact('posts', 'categories'));
@@ -39,7 +39,7 @@ class BlogController extends Controller
 
         // 2. Yan menü sayılarını yine doğru say
         $categories = Category::withCount(['posts' => function ($query) {
-            $query->where('status', true);
+            $query->where('status', 1);
         }])->get();
 
         return view('blog-core::front.index', compact('posts', 'categories', 'category'));
@@ -53,7 +53,7 @@ class BlogController extends Controller
         
         // Yan menü kategorileri (Sayılar düzeltilmiş)
         $categories = Category::withCount(['posts' => function ($query) {
-            $query->where('status', true);
+            $query->where('status', 1);
         }])->get();
 
         // Okunma sayısını artır
