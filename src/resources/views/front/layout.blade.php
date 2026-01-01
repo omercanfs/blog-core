@@ -82,15 +82,6 @@
         <div class="max-w-7xl mx-auto px-4 py-8 md:py-12">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="text-center md:text-left">
-                    <div class="bg-indigo-600 text-white p-1.5 rounded-lg group-hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16v16H4z"/>
-                            <path d="M8 8h8"/>
-                            <path d="M8 12h8"/>
-                            <path d="M8 16h5"/>
-                        </svg>
-                    </div>
-
                     <p class="font-bold text-slate-800"><span class="text-indigo-600">Blog</span>{{ config('app.name', 'DijitalKöy'); }}</p>
                     <p class="text-sm text-slate-500 mt-1">Güncel yazılarımız ve haberlerimizden haberdar olun.</p>
                 </div>
