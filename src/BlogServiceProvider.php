@@ -3,6 +3,7 @@
 namespace Omercanfs\BlogCore;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 use Omercanfs\BlogCore\View\Components\BlogWidget;
 
 class BlogServiceProvider extends ServiceProvider
