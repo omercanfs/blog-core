@@ -1,6 +1,6 @@
 <?php
 
-namespace Omercanfs\BlogCore\Http\Controllers;
+namespace Omercanfs\BlogCore\Http\Controllers\Front; // Namespace'in Front klasöründe olduğundan emin ol
 
 use Illuminate\Routing\Controller;
 use Omercanfs\BlogCore\Models\Post;
@@ -11,8 +11,16 @@ class BlogController extends Controller
     // Ana Sayfa (Tüm Yazılar)
     public function index()
     {
-        $posts = Post::with('category')->latest()->paginate(9);
-        $categories = Category::withCount('posts')->get(); // Yan menü için kategoriler ve yazı sayıları
+        // 1. Sadece AKTİF (active) yazıları getir
+        $posts = Post::active()
+                     ->with('category')
+                     ->latest()
+                     ->paginate(9);
+
+        // 2. Kategorileri getir ama sayıları sadece YAYINDAKİLER için say
+        $categories = Category::withCount(['posts' => function ($query) {
+            $query->where('status', true);
+        }])->get(); 
         
         return view('blog-core::front.index', compact('posts', 'categories'));
     }
@@ -22,8 +30,17 @@ class BlogController extends Controller
     {
         $category = Category::where('slug', $slug)->firstOrFail();
         
-        $posts = $category->posts()->with('category')->latest()->paginate(9);
-        $categories = Category::withCount('posts')->get();
+        // 1. Kategorinin sadece AKTİF yazılarını getir
+        $posts = $category->posts()
+                          ->active() // Modeldeki scopeActive çalışır
+                          ->with('category')
+                          ->latest()
+                          ->paginate(9);
+
+        // 2. Yan menü sayılarını yine doğru say
+        $categories = Category::withCount(['posts' => function ($query) {
+            $query->where('status', true);
+        }])->get();
 
         return view('blog-core::front.index', compact('posts', 'categories', 'category'));
     }
@@ -31,17 +48,20 @@ class BlogController extends Controller
     // Detay Sayfası
     public function show($slug)
     {
-        $post = Post::where('slug', $slug)->firstOrFail();
+        // 1. Yazıyı bul ama sadece AKTİF ise (Taslaksa 404 verir)
+        $post = Post::active()->where('slug', $slug)->firstOrFail();
         
-        // Yan menü için kategoriler
-        $categories = Category::withCount('posts')->get();
+        // Yan menü kategorileri (Sayılar düzeltilmiş)
+        $categories = Category::withCount(['posts' => function ($query) {
+            $query->where('status', true);
+        }])->get();
 
-
-         // Veritabanındaki sayıyı 1 artırır ve kaydeder.
+        // Okunma sayısını artır
         $post->increment('view_count');
 
-        // Benzer Yazılar (Aynı kategorideki diğer 3 yazı)
-        $relatedPosts = Post::where('category_id', $post->category_id)
+        // 2. Benzer Yazılar (Sadece AKTİF olanlar gelmeli)
+        $relatedPosts = Post::active()
+                            ->where('category_id', $post->category_id)
                             ->where('id', '!=', $post->id) // Kendisini hariç tut
                             ->latest()
                             ->take(3)
@@ -49,5 +69,4 @@ class BlogController extends Controller
 
         return view('blog-core::front.show', compact('post', 'categories', 'relatedPosts'));
     }
-    
 }

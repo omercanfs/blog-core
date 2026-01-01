@@ -15,6 +15,7 @@ class Post extends Model
         'image',       // Yeni
         'content',
         'view_count',
+        'status'
     ];
 
     public function category()
@@ -30,5 +31,10 @@ class Post extends Model
         }
         // Varsayılan resim (public klasörüne default-blog.jpg koymalısın)
         return asset('default-blog.jpg'); 
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', true);
     }
 }
