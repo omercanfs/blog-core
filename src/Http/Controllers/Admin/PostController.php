@@ -13,39 +13,36 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
+        // 1. Sorguyu Başlat
         $query = Post::with('category');
 
-        // Arama
+        // ... (Arama, Filtreleme ve Sıralama kodların burada aynen kalsın) ...
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
-
-        // Kategori
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
-
-        // Sıralama
         switch ($request->sort) {
-            case 'view_desc':
-                $query->orderBy('view_count', 'desc');
-                break;
-            case 'view_asc':
-                $query->orderBy('view_count', 'asc');
-                break;
-            case 'oldest':
-                $query->oldest();
-                break;
-            default:
-                $query->latest();
-                break;
+            case 'view_desc': $query->orderBy('view_count', 'desc'); break;
+            case 'view_asc': $query->orderBy('view_count', 'asc'); break;
+            case 'oldest': $query->oldest(); break;
+            default: $query->latest(); break;
         }
+        // ... (Filtreleme bitiş) ...
 
         $posts = $query->paginate(10)->withQueryString();
         $categories = Category::all();
 
-        // 👇 DÜZELTME: 'post' yerine 'posts' (Çoğul) yapıldı.
-        return view('blog-core::admin.posts.index', compact('posts', 'categories'));
+        // 👇 EKSİK OLAN KISIM BURASI: İstatistikleri Hesapla
+        $stats = [
+            'total_posts'      => Post::count(),
+            'total_categories' => Category::count(),
+            'total_views'      => Post::sum('view_count'),
+        ];
+
+        // 👇 'stats' değişkenini view'a gönder
+        return view('blog-core::admin.posts.index', compact('posts', 'categories', 'stats'));
     }
 
     public function create()

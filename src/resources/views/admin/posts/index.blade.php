@@ -1,6 +1,41 @@
 @extends('blog-core::admin.layout')
 
 @section('content')
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-center justify-between group hover:shadow-md transition">
+        <div>
+            <p class="text-sm font-medium text-slate-500 mb-1">Toplam İçerik</p>
+            <h3 class="text-3xl font-bold text-slate-800">{{ number_format($stats['total_posts']) }}</h3>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl group-hover:scale-110 transition">
+            📝
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-center justify-between group hover:shadow-md transition">
+        <div>
+            <p class="text-sm font-medium text-slate-500 mb-1">Aktif Kategoriler</p>
+            <h3 class="text-3xl font-bold text-slate-800">{{ number_format($stats['total_categories']) }}</h3>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl group-hover:scale-110 transition">
+            🏷️
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-center justify-between group hover:shadow-md transition">
+        <div>
+            <p class="text-sm font-medium text-slate-500 mb-1">Toplam Okunma</p>
+            <h3 class="text-3xl font-bold text-slate-800">{{ number_format($stats['total_views']) }}</h3>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl group-hover:scale-110 transition">
+            👁️
+        </div>
+    </div>
+
+</div>
+
 <div class="bg-white shadow-sm sm:rounded-lg">
     <div class="p-6 border-b border-gray-200">
         
