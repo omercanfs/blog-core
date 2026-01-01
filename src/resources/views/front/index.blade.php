@@ -1,102 +1,125 @@
 @extends('blog-core::front.layout')
 
-@section('title', isset($category) ? $category->name . ' Yazıları' : 'Blog')
+@section('title', isset($category) ? $category->name . ' Yazıları' : 'Blog - Son Yazılar')
 
 @section('content')
+
+<div class="lg:hidden mb-8 -mx-4 px-4 sticky top-16 z-40 bg-slate-50/95 backdrop-blur py-2 border-b border-slate-200">
+    <div class="flex overflow-x-auto gap-3 hide-scroll pb-1">
+        <a href="{{ route('blog.index') }}" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition {{ !isset($category) ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200' }}">
+            Tümü
+        </a>
+        @foreach($categories as $cat)
+            <a href="{{ route('blog.category', $cat->slug) }}" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200' }}">
+                {{ $cat->name }}
+            </a>
+        @endforeach
+    </div>
+</div>
+
 <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
     
     <div class="lg:col-span-3">
         
-        <div class="mb-8 border-b border-gray-200 pb-4">
-            <h1 class="text-3xl font-bold text-gray-800">
+        <div class="mb-8 pb-4 border-b border-slate-200">
+            <h1 class="text-2xl md:text-4xl font-bold text-slate-800 tracking-tight">
                 {{ isset($category) ? $category->name : 'Son Yazılar' }}
             </h1>
-            @if(isset($category))
-                <p class="text-gray-500 mt-1">Bu kategorideki yazılar listeleniyor.</p>
-                <a href="{{ route('blog.index') }}" class="text-sm text-blue-500 hover:underline mt-2 inline-block">&larr; Tümüne Dön</a>
-            @else
-                <p class="text-gray-500 mt-1">Güncel teknoloji ve yazılım dünyasından haberler.</p>
-            @endif
+            <p class="text-slate-500 mt-2 text-sm md:text-base">
+                @if(isset($category))
+                    "{{ $category->name }}" kategorisindeki içerikler listeleniyor. <a href="{{ route('blog.index') }}" class="text-blue-600 hover:underline font-medium">Tümüne dön</a>
+                @else
+                    Yazılım, teknoloji ve dijital dünyaya dair en güncel makaleler.
+                @endif
+            </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             @forelse($posts as $post)
-                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 overflow-hidden flex flex-col h-full">
-                    <a href="{{ route('blog.show', $post->slug) }}" class="block overflow-hidden h-56 relative group">
+                <article class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden flex flex-col h-full">
+                    <a href="{{ route('blog.show', $post->slug) }}" class="relative block h-56 overflow-hidden">
                         @if($post->image)
-                            <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                            <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         @else
-                            <div class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-2xl">
-                                {{ substr($post->title, 0, 1) }}
+                            <div class="w-full h-full bg-gradient-to-tr from-slate-200 to-slate-300 flex items-center justify-center">
+                                <span class="text-4xl">📝</span>
                             </div>
                         @endif
                         
                         @if($post->category)
-                            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-bold text-blue-600 rounded-full shadow-sm">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur text-blue-700 text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
                                 {{ $post->category->name }}
                             </span>
                         @endif
                     </a>
                     
                     <div class="p-6 flex flex-col flex-grow">
-                        <div class="text-xs text-gray-400 mb-2 flex items-center">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            {{ $post->created_at->translatedFormat('d F Y') }}
+                        <div class="flex items-center text-xs text-slate-400 mb-3 gap-2">
+                            <span class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                {{ $post->created_at->translatedFormat('d F Y') }}
+                            </span>
                         </div>
 
-                        <h2 class="text-xl font-bold text-gray-800 mb-3 leading-snug">
-                            <a href="{{ route('blog.show', $post->slug) }}" class="hover:text-blue-600 transition">
+                        <h2 class="text-lg font-bold text-slate-800 mb-3 leading-snug group-hover:text-blue-600 transition line-clamp-2">
+                            <a href="{{ route('blog.show', $post->slug) }}">
                                 {{ $post->title }}
                             </a>
                         </h2>
 
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
+                        <p class="text-slate-500 text-sm mb-5 line-clamp-3 leading-relaxed">
                             {{ Str::limit(strip_tags($post->content), 120) }}
                         </p>
 
-                        <a href="{{ route('blog.show', $post->slug) }}" class="inline-flex items-center text-blue-600 font-semibold text-sm hover:text-blue-800 transition">
-                            Devamını Oku 
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </a>
+                        <div class="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between">
+                            <a href="{{ route('blog.show', $post->slug) }}" class="text-sm font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition">
+                                Okumaya Başla
+                                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                </article>
             @empty
-                <div class="col-span-2 text-center py-10 bg-gray-50 rounded-lg">
-                    <p class="text-gray-500 text-lg">Bu kategoride henüz yazı bulunmuyor.</p>
+                <div class="col-span-1 md:col-span-2 text-center py-16 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+                    <div class="text-5xl mb-4">📭</div>
+                    <h3 class="text-lg font-bold text-slate-700">Henüz Yazı Yok</h3>
+                    <p class="text-slate-500">Bu kategoride henüz içerik eklenmemiş.</p>
                 </div>
             @endforelse
         </div>
 
-        <div class="mt-10">
+        <div class="mt-12">
             {{ $posts->links() }}
         </div>
     </div>
 
-    <div class="lg:col-span-1">
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-8">
-            <h3 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">Kategoriler</h3>
-            
-            <ul class="space-y-2">
-                <li>
-                    <a href="{{ route('blog.index') }}" class="flex justify-between items-center p-2 rounded hover:bg-gray-50 transition {{ !isset($category) ? 'text-blue-600 font-bold bg-blue-50' : 'text-gray-600' }}">
-                        <span>Tümü</span>
-                    </a>
-                </li>
+    <div class="lg:col-span-1 space-y-8">
+        
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 sticky top-24">
+            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                Kategoriler
+            </h3>
+            <div class="space-y-1">
+                <a href="{{ route('blog.index') }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition {{ !isset($category) ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <span>Tümü</span>
+                </a>
                 @foreach($categories as $cat)
-                    <li>
-                        <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center p-2 rounded hover:bg-gray-50 transition {{ (isset($category) && $category->id == $cat->id) ? 'text-blue-600 font-bold bg-blue-50' : 'text-gray-600' }}">
-                            <span>{{ $cat->name }}</span>
-                            <span class="text-xs bg-gray-100 text-gray-500 py-0.5 px-2 rounded-full">{{ $cat->posts_count }}</span>
-                        </a>
-                    </li>
+                    <a href="{{ route('blog.category', $cat->slug) }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                        <span>{{ $cat->name }}</span>
+                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $cat->posts_count }}</span>
+                    </a>
                 @endforeach
-            </ul>
-
-            <div class="mt-8 p-4 bg-indigo-50 rounded-lg border border-indigo-100 text-center">
-                <p class="text-indigo-800 font-bold text-sm">BlogCore Bülten</p>
-                <p class="text-xs text-indigo-600 mt-1">En yeni yazılardan haberdar olmak için takipte kalın.</p>
             </div>
         </div>
+
+        <div class="bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl p-6 text-white text-center shadow-lg shadow-blue-200">
+            <h4 class="font-bold text-lg mb-2">Bültenimize Katılın</h4>
+            <p class="text-xs text-blue-100 mb-4">En yeni yazılardan ilk sizin haberiniz olsun.</p>
+            <input type="email" placeholder="E-posta adresiniz" class="w-full text-sm px-3 py-2 rounded-lg text-slate-800 focus:outline-none mb-2">
+            <button class="w-full bg-white text-blue-600 text-sm font-bold py-2 rounded-lg hover:bg-blue-50 transition">Abone Ol</button>
+        </div>
+
     </div>
 
 </div>
