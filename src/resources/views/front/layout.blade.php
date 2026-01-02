@@ -42,7 +42,7 @@
                 </a>
 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition">Ana Site</a>
+                    <a href="/" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition">{{ $settings['site_title'] ?? 'DijitalKöy' }}</a>
                     <a href="{{ route('blog.index') }}" class="text-sm font-medium text-blue-600">Blog Anasayfa</a>
                 </div>
 
