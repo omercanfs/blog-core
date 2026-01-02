@@ -4,24 +4,27 @@
 
 @section('content')
 
+{{-- ================= MOBİL KATEGORİ MENÜSÜ ================= --}}
 <div class="lg:hidden mb-8 -mx-4 px-4 sticky top-16 z-40 bg-slate-50/95 backdrop-blur py-2 border-b border-slate-200">
     <div class="flex overflow-x-auto gap-3 hide-scroll pb-1">
         <a href="{{ route('blog.index') }}" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition {{ !isset($category) ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200' }}">
             Tümü
         </a>
-        @foreach($categories as $cat)
-            {{-- SADECE YAZI SAYISI 0'DAN BÜYÜKSE GÖSTER --}}
-            @if($cat->active_posts_count > 0)
-                <a href="{{ route('blog.category', $cat->slug) }}" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200' }}">
-                    {{ $cat->name }}
-                </a>
-            @endif
+        
+        {{-- MOBİL İÇİN DE $sidebarCategories KULLANIYORUZ --}}
+        @foreach($sidebarCategories as $cat)
+            <a href="{{ route('blog.category', $cat->slug) }}" class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200' }}">
+                <span>{{ $cat->name }}</span>
+                {{-- Mobilde de sayıyı gösterelim --}}
+                <span class="text-[10px] opacity-70 bg-black/10 px-1.5 rounded-full">{{ $cat->active_posts_count }}</span>
+            </a>
         @endforeach
     </div>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
     
+    {{-- ================= SOL TARAFA (YAZILAR) ================= --}}
     <div class="lg:col-span-3">
         
         <div class="mb-8 pb-4 border-b border-slate-200">
@@ -96,25 +99,36 @@
         </div>
     </div>
 
+    {{-- ================= SAĞ TARAF (SIDEBAR) ================= --}}
     <div class="lg:col-span-1 space-y-8">
         
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 sticky top-24">
             <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
                 Kategoriler
             </h3>
-            <div class="space-y-1">
-                <a href="{{ route('blog.index') }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition ...">
+            
+            <div class="flex flex-col space-y-1">
+                
+                <a href="{{ route('blog.index') }}" class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition {{ !isset($category) ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
                     <span>Tümü</span>
                 </a>
                 
-                @foreach($categories as $cat)
-                    <a href="{{ route('blog.category', $cat->slug) }}" class="...">
+                {{-- MASAÜSTÜ İÇİN DE $sidebarCategories KULLANIYORUZ --}}
+                @foreach($sidebarCategories as $cat) 
+                    <a href="{{ route('blog.category', $cat->slug) }}" 
+                       class="flex justify-between items-center px-3 py-2 rounded-lg text-sm font-medium transition {{ (isset($category) && $category->id == $cat->id) ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                        
                         <span>{{ $cat->name }}</span>
-                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">
+                        
+                        {{-- Controller'dan gelen DOĞRU sayı --}}
+                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-bold">
                             {{ $cat->active_posts_count }}
                         </span>
+
                     </a>
                 @endforeach
+
             </div>
         </div>
 

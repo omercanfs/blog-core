@@ -17,12 +17,10 @@ class BlogController extends Controller
                      ->latest()
                      ->paginate(9);
 
-        // 2. Kategorileri getir ama sayıları sadece YAYINDAKİLER için say
-        $categories = Category::withCount('activePosts')
-            ->having('active_posts_count', '>', 0) // 0 olanları veritabanından hiç çekme
-            ->get();
-        
-        return view('blog-core::front.index', compact('posts', 'categories'));
+        $sidebarCategories = Category::withCount('activePosts')->get();
+    
+        // View'a yeni isimle gönderiyoruz
+        return view('blog-core::front.index', compact('posts', 'sidebarCategories'));
     }
 
     // Kategoriye Göre Filtreleme
@@ -38,11 +36,8 @@ class BlogController extends Controller
                           ->paginate(9);
 
         // 2. Yan menü sayılarını yine doğru say
-        $categories = Category::withCount('activePosts')
-            ->having('active_posts_count', '>', 0) // 0 olanları veritabanından hiç çekme
-            ->get();
-
-        return view('blog-core::front.index', compact('posts', 'categories', 'category'));
+        $sidebarCategories = Category::withCount('activePosts')->get();
+        return view('blog-core::front.index', compact('posts', 'sidebarCategories', 'category'));
     }
 
     // Detay Sayfası
@@ -52,9 +47,7 @@ class BlogController extends Controller
         $post = Post::active()->where('slug', $slug)->firstOrFail();
         
         // Yan menü kategorileri (Sayılar düzeltilmiş)
-        $categories = Category::withCount('activePosts')
-            ->having('active_posts_count', '>', 0) // 0 olanları veritabanından hiç çekme
-            ->get();
+        $sidebarCategories = Category::withCount('activePosts')->get();
 
         // Okunma sayısını artır
         $post->increment('view_count');
@@ -67,6 +60,6 @@ class BlogController extends Controller
                             ->take(3)
                             ->get();
 
-        return view('blog-core::front.show', compact('post', 'categories', 'relatedPosts'));
+        return view('blog-core::front.show', compact('post', 'sidebarCategories', 'relatedPosts'));
     }
 }

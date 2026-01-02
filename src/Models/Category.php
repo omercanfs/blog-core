@@ -14,8 +14,9 @@ class Category extends Model
         return $this->hasMany(Post::class, 'category_id');
     }
 
+
     public function activePosts()
     {
-        return $this->hasMany(Post::class, 'category_id')->where('status', true);
+        return $this->hasMany(Post::class, 'category_id')->where('status', 1);
     }
 }
